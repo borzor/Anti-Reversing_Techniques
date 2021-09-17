@@ -1,11 +1,11 @@
 # Сборка и запуск программы
 ```
 git clone https://github.com/borzor/Anti-Reversing_Technique.git
-cd Anti-Reversing_Technique/
+cd Anti-Reversing_Techniques/
 mkdir build
 cd build/
-cmake ./CMakeLists.txt 
-cmake --build .
+cmake ..
+make
 sudo ./untitled
 ```
 
