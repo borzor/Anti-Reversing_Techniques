@@ -56,7 +56,7 @@ void __attribute__ ((optimize("O1")))generateKey(const std::string &login, const
     for(size_t i = 0; i < key.size(); i++){
         tmp1 = key[i] << std::stoi(&buffer.release[0])%key.size();
         tmp2 = key[i] >> (key.size() -  std::stoi(&buffer.release[0]) % key.size());
-        key[i] = 33 + (tmp1 | tmp2) % 95;
+        key[i] = 33 + (tmp1 | tmp2) % 94;
     }
 }
 
