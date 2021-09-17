@@ -12,7 +12,7 @@ char* calc_addr(char* p_addr){
     return p_addr + 0x400000;
 }
 
-void __attribute__ ((optimaze("O1")))generateKey(const std::string &login, const std::string &password, std::string &key){
+void __attribute__ ((optimize("O1")))generateKey(const std::string &login, const std::string &password, std::string &key){
 #ifdef __unix__
     char* label_address = 0;
     asm volatile(
@@ -91,7 +91,7 @@ int main() {
 #ifdef __unix__
     int fork_pid = fork();
     if (fork_pid == 0){
-        if (ptrace(PT_ATTACHEXC, getppid(), NULL, NULL) != 0){
+        if (ptrace(PTRACE_ATTACH, getppid(), NULL, NULL) != 0){
             exit(EXIT_FAILURE);
         }
         ptrace(PTRACE_SETOPTIONS, getppid(), NULL, PTRACE_O_TRACEFORK);// PTRACE_O_EXITKILL
