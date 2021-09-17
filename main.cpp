@@ -3,7 +3,8 @@
 #include <unistd.h>
 #include <cstring>
 #include <sys/ptrace.h>
-#include <wait.h>
+#include <sys/wait.h>
+#include <csignal>
 
 #define password_size 32
 
@@ -11,7 +12,8 @@ char* calc_addr(char* p_addr){
     return p_addr + 0x400000;
 }
 
-void generateKey(const std::string &login, const std::string &password, std::string &key){
+void __attribute__ ((optimaze("O1")))generateKey(const std::string &login, const std::string &password, std::string &key){
+#ifdef __unix__
     char* label_address = 0;
     asm volatile(
         "jmp unaligned\n"
@@ -25,8 +27,7 @@ void generateKey(const std::string &login, const std::string &password, std::str
         :
         : "g"(label_address));
     return_here:
-
-    std::cout<<login<<"\n";
+#endif
     uint32_t tmp1,tmp2;
     struct utsname buffer;
     if (uname(&buffer) < 0) {
@@ -87,9 +88,10 @@ int main() {
     std::cin>>login;
     std::cout<<"Enter password\n";
     std::cin>>password;
+#ifdef __unix__
     int fork_pid = fork();
     if (fork_pid == 0){
-        if (ptrace(PTRACE_ATTACH, getppid(), NULL, NULL) != 0){
+        if (ptrace(PT_ATTACHEXC, getppid(), NULL, NULL) != 0){
             exit(EXIT_FAILURE);
         }
         ptrace(PTRACE_SETOPTIONS, getppid(), NULL, PTRACE_O_TRACEFORK);// PTRACE_O_EXITKILL
@@ -109,7 +111,7 @@ int main() {
             }
             if (status >> 16 == PTRACE_EVENT_FORK)
             {
-// follow the fork
+                // follow the fork
                 long newpid = 0;
                 ptrace(PTRACE_GETEVENTMSG, pid, NULL, &newpid);
                 ptrace(PTRACE_ATTACH, newpid, NULL, NULL);
@@ -119,14 +121,13 @@ int main() {
         }
 
     }
+#endif
     generateKey(login, password,key);
-    printf("your key is %s\n",key.data());
-    printf("Enter key\n");
-    scanf("%s",checkKey.data());
+    std::cout<<"your key is \n"<<key<<"\n"<<"Enter key\n";
+    std::cin>>checkKey;
     if(!strcmp(key.c_str(),checkKey.c_str())){
         std::cout<<"congratulation\n";
     }
-
     return 0;
 }
 
