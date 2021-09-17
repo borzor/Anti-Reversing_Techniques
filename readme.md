@@ -4,7 +4,7 @@ git clone https://github.com/borzor/Anti-Reversing_Technique
 cd Anti-Reversing_Technique
 cmake ./CMakeLists.txt 
 cmake --build .
-sudo ./ ...
+sudo ./untitled
 ```
 
 ## Используемые методы против отладки
