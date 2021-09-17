@@ -1,6 +1,6 @@
 # Сборка и запуск программы
 ```
-git clone https://github.com/borzor/Anti-Reversing_Technique.git
+git clone https://github.com/borzor/Anti-Reversing_Techniques.git
 cd Anti-Reversing_Techniques/
 mkdir build
 cd build/
